@@ -13,6 +13,7 @@ const playerOneLocationX = 130;
 const playerOneLocationY = 340;
 const playerTwoLocationX = 1020;
 const playerTwoLocationY = 380;
+var whosTurn = false;
 
 
 ///---------------  Class  BoardGame
@@ -94,18 +95,44 @@ class BoardGame {
 
    } //--------- End drawStartGameTemplate
 
+
+   checkColision() {
+
+    if ( ((this.playerOne.bullet.BulletLocation[0] >= this.playerTwo.playerLocation[0]) && (this.playerOne.bullet.BulletLocation[1] >= this.playerTwo.playerLocation[1]) ) ||
+         ((this.playerTwo.bullet.BulletLocation[0] <= this.playerOne.playerLocation[0]) && (this.playerTwo.bullet.BulletLocation[1] >= this.playerOne.playerLocation[1]) ))
+            {
+              return true;
+            }
+
+   } //------------- End checkColision function
+
      //------------- Animate
 
      animation(interval) {
 
-      setTimeout(() =>  { 
+      let next = true;
+
+       setTimeout(() =>  { 
     
         console.log("animation");
-        console.log(this.width);
+        
+        if ( this.checkColision() )
+        {
+            if (whosTurn === false) {
+            this.playerTwo.health -=10; //(this.playerOne.power/100) * this.playerOne.strength;
+            
+            } else {
+              this.playerOne.health -=10;
+            }
+            next = false;
+        }
 
         this.ctx.clearRect(0, 0, this.windowX, this.windowY);
         this.drawEverything();  
-        this.animation(interval);        
+        if(next){
+          this.animation(interval);  
+        }
+
         }, interval ) 
 
      } //------------- End Animate Function
@@ -202,7 +229,7 @@ class Bullet {
     this.BulletLocation = [BulletLocationX, BulletLocationY];
     this.canvas = document.getElementById('canvas');
     this.ctx = this.canvas.getContext('2d');
-    this.power = 0;
+    this.power = 50;
     this.width = 30;
     this.height = 30;
   };
