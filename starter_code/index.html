@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <link rel="stylesheet" href="stylesheets/styles.css">
+  <title>Game</title>
+</head>
+<body>
+
+
+      <header>
+        
+        <section class="top-section">
+            <input type="text" id="name-player-1" name="firstname" placeholder="Change name..">
+            <img class="game-logo" src="./images/game-logo-T.png" alt="" > 
+            <button class="instractions-btn">instractions</button> 
+            <input type="text" id="name-player-2" name="firstname" placeholder="Change name.."> 
+        </section>
+
+        <section class= "middle-section">
+          <span class="player-one">Dunled Trump</span>
+          <button id="start-game-button">START GAME</button>
+          <span class="player-two">Terorist</span>
+        </section>
+      </header>
+
+      <section class="game-window" style="text-align:center;">
+        <canvas id="canvas" height="550px" width="1160px"></canvas>
+      </section>
+
+      <div class="instractions">
+        <h3>Instractions</h3>
+          <ul>
+            <li>
+              use arrows to adjust gun angle
+            </li>
+            <li>
+              hold shift to adjust gun power, (from 1 - 100)
+            </li>
+            <li>
+              use space-bar to fire
+            </li>
+            <li>
+              damege = power/100 * strangth
+            </li>
+          </ul>
+        </div>
+
+
+
+  <script type="text/javascript" src="canvas.js"></script>
+  <script type="text/javascript" src="makeTheWorldGreatAgain.js"></script>
+
+</body>
+</html>

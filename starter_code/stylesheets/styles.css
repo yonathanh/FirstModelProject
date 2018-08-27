@@ -1,0 +1,103 @@
+
+
+/* ---------------  styles --------------- */
+
+/* removes all default margin and padding for every object on the page */
+* { 
+  margin: 0;
+  padding: 0;
+  }
+
+  html, body, {
+    position:fixed;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+}
+
+ul {
+  /* list-style: none; */
+  margin-left: 20px;
+}
+
+header {
+  height: 130px
+}
+
+    .top-section {
+      text-align:center;
+      margin: 0px 0px;
+    }
+
+    .instractions-btn {
+      background: linear-gradient(to bottom, rgb(158, 27, 49), rgb(168, 55, 55));
+      color: rgb(145, 255, 249);
+      padding: 4px;
+      margin-right: 10px;
+      border-radius: 6px;
+    }
+    .instractions {
+      /* visibility: hidden; */
+
+      display: block; 
+      width: 170px;
+      height: 50px;
+      font-size: 6px;
+      border: 5px solid black; 
+    }
+
+    h3 {
+    margin-left: 40px;
+    }
+
+      .game-logo {
+        height: 60px;
+        padding: 5px 300px;
+        }
+
+
+
+    /* Middle section */
+
+    .middle-section {
+    
+      text-align: center;
+      margin: 0px 0px;
+
+    }
+
+        span {
+          width: 100px;
+          color:red;
+          font-size: 40px;
+        }
+
+        #start-game-button {
+          border: 0px;
+          box-shadow: 0;
+          background: linear-gradient(to bottom, rgb(158, 27, 49), rgb(168, 55, 55));
+          color: rgb(145, 255, 249);
+          margin: 10px 160px;
+          height: 3vw;
+          width: 300px;
+          font-size: 18px;
+          border-radius: 6px;
+        }
+
+
+
+  canvas {
+    border: 10px solid black;
+  }
+
+  #canvas {
+    background: linear-gradient(0deg, rgba(187, 131, 48, 0.1), rgba(133, 6, 34, 0.1)), url(../images/game-background-sharks.jpg) repeat;
+
+  }
+
+
+
+
+
+
