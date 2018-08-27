@@ -4,7 +4,7 @@
 
 const arrayOfNames = ["Gal Gadot", "Tom Hardy", "Emilia Clarke", "Alexandra Daddario", "Bill Skarsgård", "Pom Klementieff", "Ana de Armas", "Dan Stevens", "Sofia Boutella", "Katherine Langford", "Karen Gillan", "Robbie", "Felicity Jones", "Emma Stone", "Dylan Minnette", "Jennifer Lawrence", "Alicia Vikander", "ritt Robertson", "Brie Larson", "Keanu Reeves", "Sophia Lillis", "James McAvoy"];
 const health = 100;
-const strength = 40;
+const strength = 80;
 const rounds = 4;
 const imgSrcPlayer1 = "./images/game-logo-T.png";
 const imgSrcPlayer2 = "./images/teroristT.png";
@@ -71,8 +71,8 @@ class BoardGame {
    drawEverything() {
     this.playerOne.drawPlayer();
     this.playerTwo.drawPlayer();
-    this.playerOne.bullet.drawBullet();
-    this.playerTwo.bullet.drawBullet();
+    this.playerOne.bullet.drawBullet(50,-20);
+    this.playerTwo.bullet.drawBullet(-30,0);
    } 
 
    drawStartGameTemplate() {
@@ -81,8 +81,8 @@ class BoardGame {
       this.playerOne.playerLocation = [playerOneLocationX,playerOneLocationY]; 
       this.playerTwo.playerLocation = [playerTwoLocationX,playerTwoLocationY];
       // reset Bullets location
-      this.playerOne.bullet.BulletLocation = [playerOneLocationX,playerOneLocationY-100];
-      this.playerTwo.bullet.BulletLocation = [playerOneLocationX,playerOneLocationY-100];
+      this.playerOne.bullet.BulletLocation = [playerOneLocationX,playerOneLocationY];
+      this.playerTwo.bullet.BulletLocation = [playerTwoLocationX,playerTwoLocationY];
 
       //---------- draw the board
       this.drawEverything();
@@ -121,14 +121,13 @@ class BoardGame {
 //----------- Class Player
 class Player {
 
-  constructor(imgSrc, playerLocationX, playerLocationY, healthArg, strengthArg, nameArg) {
+  constructor(imgSrc, playerLocationX, playerLocationY, healthArg, strengthArg) {
 
     this.health= healthArg;
-    this.strengthArg = strengthArg;
-    this.name = nameArg;
+    this.strength = strengthArg;
     this.imgSrc = imgSrc;
     this.playerLocation = [playerLocationX, playerLocationY];
-    this.bullet = new Bullet(imgSrcBullet3, playerOneLocationX, playerOneLocationY);
+    this.bullet = new Bullet(imgSrcBullet3, playerLocationX, playerLocationY);
     this.canvas = document.getElementById('canvas');
     this.ctx = this.canvas.getContext('2d');
     this.width = 60;
@@ -203,16 +202,17 @@ class Bullet {
     this.BulletLocation = [BulletLocationX, BulletLocationY];
     this.canvas = document.getElementById('canvas');
     this.ctx = this.canvas.getContext('2d');
+    this.power = 0;
     this.width = 30;
     this.height = 30;
   };
 
-    drawBullet(dx, dy, dp) {
+    drawBullet(dx, dy) {
 
       console.log('Bullet drawen');
       console.log (this.imgSrc);
   
-        //getting the src to display as img JS code
+        //getting the src to display as img (JS code)
         var theImage = new Image();
         theImage.src = this.imgSrc;
         
@@ -223,7 +223,7 @@ class Bullet {
           // drawing the power level above the bullet
           this.ctx.font = "15px Arial";
           this.ctx.fillStyle="#FF0000";
-          this.ctx.fillText(this.strengthArg, this.BulletLocation[0],this.BulletLocation[1])
+          this.ctx.fillText(`${this.power} power`, this.BulletLocation[0],50)
       
         }
 
@@ -232,35 +232,28 @@ class Bullet {
 
   // -------- shooting bulet
 
-  shoot(dx, dy, dp, direction, i) {
+  shoot(direction, strength) {
 
+    this.ex = 50; //for exelaration
+    let directionX = direction;
+    let directionY = direction;
+    let fource = (this.power/100) * strength;
+    console.log(fource);
+    
+    setInterval(() =>  { 
       console.log('Shoot');
-
-      this.dx = dx; //starting point of bulet from player
-      this.dy = dy; //starting point of bulet from highet of player
-      this.dp = dp; //langth of bulet
-
-      setTimeout(() =>  { 
       
-      this.drawBullet(this.dx, this.dy, this.dp);
+      this.BulletLocation[0] += (10 * directionX);
+      this.BulletLocation[1] -= (10 * directionY);
 
-      this.dx += (10 * direction); // if negative number will go the other direction
-      this.dp += (10 * direction); //langth of bulet
-      this.dy -= 10; //use for bullet going diagonally
-      this.ex = 100; //for exelaration
-                
-     // 80 is the amount until reacher the other player, temporary value
-        if (i < 40) {  
-          i++;
+      fource--;
 
-          if(i > 20) {
-            this.dy += 20;
-            //this.ex += 5;
-          }       
+      if (fource <= 1) {
+        directionY = -1;
+
+      }
+   
           
-          
-          this.shoot(this.dx, this.dy, this.dp, direction, i);    
-        }   else {this.ctx.clearRect(this.BulletLocation[0] + (this.dx - 11), this.BulletLocation[1], this.width, this.height);} // deletes the reminder bullet         
       }, this.ex ) //  negative speed of bullet, increse to decrese speed (increases time wait to draw next)
 
    } // end of function shoot
@@ -287,13 +280,22 @@ document.getElementById('start-game-button').onclick = function () {
 
 // needs an if statment to activate and deactivate player one
 // key controls for player Two
+
 document.onkeydown = (e) =>{
 
   console.log(e.key)
 
-  switch(e.key){
+    switch(e.key){    case 'q':
+    if (boardGame.playerTwo.bullet.power < 100) {
+    boardGame.playerTwo.bullet.power++;
+    }
+    break;
+    case 'a':
+    if (boardGame.playerTwo.bullet.power > 0) {
+    boardGame.playerTwo.bullet.power--;}
+    break;
     case 'Shift':
-    boardGame.playerTwo.bullet.shoot(60, 20, 70, -1, 0); // (starting point of bulet from player, starting point of bulet from highet of player, langth of bulet, direction, startting loop point)
+    boardGame.playerTwo.bullet.shoot(1, boardGame.playerTwo.strength);
     break;
     case 'ArrowDown':
     boardGame.playerTwo.moveDown();
@@ -316,8 +318,17 @@ document.onkeydown = (e) =>{
   console.log(e.key)
 
   switch(e.key){
+    case 'q':
+    if (boardGame.playerOne.bullet.power < 100) {
+    boardGame.playerOne.bullet.power++;
+    }
+    break;
+    case 'a':
+    if (boardGame.playerOne.bullet.power > 0) {
+    boardGame.playerOne.bullet.power--;}
+    break;
     case 'Shift':
-    boardGame.playerOne.bullet.shoot(60, 20, 70, 1, 0); // (starting point of bulet from player, starting point of bulet from highet of player, langth of bulet, direction, startting loop point)
+    boardGame.playerOne.bullet.shoot(1, boardGame.playerOne.strength);
     break;
     case 'ArrowDown':
     boardGame.playerOne.moveDown();
