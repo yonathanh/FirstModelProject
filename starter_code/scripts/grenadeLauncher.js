@@ -101,8 +101,33 @@ class BoardGame {
 
    checkColision() {
 
-    if ( ((this.playerOne.bullet.BulletLocation[0] >= this.playerTwo.playerLocation[0]) && (this.playerOne.bullet.BulletLocation[1] >= this.playerTwo.playerLocation[1]) ) ||
-         ((this.playerTwo.bullet.BulletLocation[0] <= this.playerOne.playerLocation[0]) && (this.playerTwo.bullet.BulletLocation[1] >= this.playerOne.playerLocation[1]) ))
+    //((this.playerOne.bullet.BulletLocation[0] >= this.playerTwo.playerLocation[0]) && (this.playerOne.bullet.BulletLocation[1] >= this.playerTwo.playerLocation[1]) ) ||
+    //((this.playerTwo.bullet.BulletLocation[0] <= this.playerOne.playerLocation[0]) && (this.playerTwo.bullet.BulletLocation[1] >= this.playerOne.playerLocation[1]) ))
+
+    let object1x = this.playerOne.playerLocation[0];
+    let object1y = this.playerOne.playerLocation[1];
+    let object1width = this.playerOne.width;
+    let object1height = this.playerOne.height;
+    let object1Bx = this.playerOne.bullet.BulletLocation[0];
+    let object1By = this.playerOne.bullet.BulletLocation[1];
+    let object1Bwidth = this.playerOne.bullet.width;
+    let object1Bheight = this.playerOne.bullet.height;
+    let object2x = this.playerTwo.playerLocation[0];
+    let object2y = this.playerTwo.playerLocation[1];
+    let object2width = this.playerTwo.width;
+    let object2height = this.playerTwo.height;
+    let object2Bx = this.playerTwo.bullet.BulletLocation[0];
+    let object2By = this.playerTwo.bullet.BulletLocation[1];
+    let object2Bwidth = this.playerTwo.bullet.width;
+    let object2Bheight = this.playerTwo.bullet.height;
+
+    // The objects are touching
+
+    if ( (object1Bx < object2x + object2width  && object1Bx + object1Bwidth  > object2x) &&
+      (object1By < object2y + object2height && object1By + object1Bheight > object2y)   
+      || 
+      (object2Bx < object1x + object1width  && object2Bx + object2Bwidth  > object1x) &&
+      (object2By < object1y + object1height && object2By + object2Bheight > object1y) ) 
             {
               return true;
             }
@@ -176,9 +201,6 @@ class Player {
   //----------------- draw charector
   drawPlayer() {
 
-    console.log('player drawen');
-    console.log (this.imgSrc);
-
       //getting the src to display as img JS code
       var theImage = new Image();
       theImage.src = this.imgSrc;
@@ -202,22 +224,18 @@ class Player {
 
  //----------------- Movieng Controls
     moveUp(){
-      console.log('moveUp');
       this.playerLocation[1] -= 10;
     }
 
     moveDown(){
-      console.log('moveDown');
       this.playerLocation[1] += 10;
     }
 
     moveRight(){
-      console.log('moveRight');
       this.playerLocation[0] += 10;
     }
 
     moveLeft(){
-      console.log('moveLeft');
       this.playerLocation[0] -= 10;
     }
 
@@ -233,15 +251,12 @@ class Bullet {
     this.BulletLocation = [BulletLocationX, BulletLocationY];
     this.canvas = document.getElementById('canvas');
     this.ctx = this.canvas.getContext('2d');
-    this.power = 50;
+    this.power = 100;
     this.width = 30;
     this.height = 30;
   };
 
     drawBullet(dx, dy) {
-
-      console.log('Bullet drawen');
-      console.log (this.imgSrc);
   
         //getting the src to display as img (JS code)
         var theImage = new Image();
@@ -255,31 +270,31 @@ class Bullet {
 
   // -------- shooting bulet
 
-  shoot(direction, strength) {
+  shoot(direction, strength ) {
+
 
     this.ex = 50; //for exelaration
     let directionX = direction;
-    let directionY = direction;
+    let directionY = 1;
     let fource = (this.power/100) * strength;
-    console.log(fource);
-    
-    setInterval(() =>  { 
-      console.log('Shoot');
       
-      this.BulletLocation[0] += (10 * directionX);
-      this.BulletLocation[1] -= (10 * directionY);
-
-      fource--;
-
-      if (fource <= 1) {
-        directionY = -1;
-
-      }
-   
-          
+      setInterval(() =>  { 
+        
+        this.BulletLocation[0] += (10 * directionX);
+        this.BulletLocation[1] -= (10 * directionY);
+  
+        fource--;
+  
+        if (fource <= 1) {
+          directionY = -1;
+        }
+     
       }, this.ex ) //  negative speed of bullet, increse to decrese speed (increases time wait to draw next)
 
+
+
    } // end of function shoot
+
 
 }  // End of Class bullet
 
@@ -292,7 +307,6 @@ class Bullet {
 
 // The Game Start Buttens Has Been Clicked
 document.getElementById('start-game-button').onclick = function () { 
-  console.log("game started")
 
   // Genarates a new game
   boardGame = new BoardGame(arrayOfNames, health, strength, rounds); 
@@ -303,7 +317,7 @@ document.getElementById('start-game-button').onclick = function () {
 
 
 
-function checkTurn() {
+function changeTurn() {
 
     
   if ( boardGame.checkColision() )
@@ -311,9 +325,12 @@ function checkTurn() {
       if (whosTurn === true) {
       boardGame.playerTwo.health = boardGame.playerOne.health - (boardGame.playerOne.bullet.power/100) * boardGame.playerOne.strength;
       whosTurn = false;
+      boardGame.playerOne.bullet = new Bullet(imgSrcBullet3, playerOneLocationX, playerOneLocationY);
+
       } else {
         boardGame.playerOne.health = boardGame.playerOne.health - (boardGame.playerOne.bullet.power/100) * boardGame.playerOne.strength;
         whosTurn = true;
+        boardGame.playerTwo.bullet = new Bullet(imgSrcBullet3, playerTwoLocationX, playerTwoLocationY);
       }
       
   }
@@ -324,7 +341,8 @@ function checkTurn() {
 function animation() {
 
   boardGame.ctx.clearRect(0, 0, boardGame.windowX, boardGame.windowY);
-  boardGame.drawEverything();  
+  boardGame.drawEverything(); 
+  changeTurn(); 
 
   window.requestAnimationFrame(animation);
 
@@ -380,7 +398,7 @@ document.onkeydown = (e) =>{
         boardGame.playerTwo.bullet.power--;}
         break;
         case 'Shift':
-        boardGame.playerTwo.bullet.shoot(1, boardGame.playerTwo.strength);
+        boardGame.playerTwo.bullet.shoot(-1, boardGame.playerTwo.strength);
         break;
         case 'ArrowDown':
         e.preventDefault();
