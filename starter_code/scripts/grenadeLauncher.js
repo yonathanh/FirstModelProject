@@ -4,7 +4,7 @@
 
 const arrayOfNames = ["Gal Gadot", "Tom Hardy", "Emilia Clarke", "Alexandra Daddario", "Bill Skarsgård", "Pom Klementieff", "Ana de Armas", "Dan Stevens", "Sofia Boutella", "Katherine Langford", "Karen Gillan", "Robbie", "Felicity Jones", "Emma Stone", "Dylan Minnette", "Jennifer Lawrence", "Alicia Vikander", "ritt Robertson", "Brie Larson", "Keanu Reeves", "Sophia Lillis", "James McAvoy"];
 const health = 100;
-const strength = 80;
+const strength = 40;
 const rounds = 4;
 const imgSrcPlayer1 = "./images/game-logo-T.png";
 const imgSrcPlayer2 = "./images/teroristT.png";
@@ -13,7 +13,7 @@ const playerOneLocationX = 130;
 const playerOneLocationY = 340;
 const playerTwoLocationX = 1020;
 const playerTwoLocationY = 380;
-var whosTurn = false;
+var whosTurn = true;
 
 
 ///---------------  Class  BoardGame
@@ -86,7 +86,10 @@ class BoardGame {
       this.playerTwo.bullet.BulletLocation = [playerTwoLocationX,playerTwoLocationY];
 
       //---------- draw the board
-      this.drawEverything();
+      this.playerOne.drawPlayer();
+      this.playerTwo.drawPlayer();
+      this.playerOne.bullet.drawBullet(50,-20);
+      this.playerTwo.bullet.drawBullet(-30,0);
 
 
       //------------- draw player name
@@ -106,36 +109,34 @@ class BoardGame {
 
    } //------------- End checkColision function
 
-     //------------- Animate
+    //  //------------- Animate
 
-     animation(interval) {
+    //  animation() {
 
-      let next = true;
-
-       setTimeout(() =>  { 
     
-        console.log("animation");
+    //     console.log("animation");
         
-        if ( this.checkColision() )
-        {
-            if (whosTurn === false) {
-            this.playerTwo.health -=10; //(this.playerOne.power/100) * this.playerOne.strength;
+    //     if ( this.checkColision() )
+    //     {
+    //         if (whosTurn === false) {
+    //         this.playerTwo.health = this.playerOne.health - (this.playerOne.bullet.power/100) * this.playerOne.strength;
+    //         whosTurn = true;
+    //         } else {
+    //           this.playerOne.health = this.playerOne.health - (this.playerOne.bullet.power/100) * this.playerOne.strength;
+    //           whosTurn = false;
+    //         }
             
-            } else {
-              this.playerOne.health -=10;
-            }
-            next = false;
-        }
+    //     }
 
-        this.ctx.clearRect(0, 0, this.windowX, this.windowY);
-        this.drawEverything();  
-        if(next){
-          this.animation(interval);  
-        }
+    //     this.ctx.clearRect(0, 0, this.windowX, this.windowY);
+    //     this.drawEverything();  
+    //     if(whosTurn){
+    //       this.animation();  
+    //     }
 
-        }, interval ) 
+    //     window.requestAnimationFrame(this.animation());
 
-     } //------------- End Animate Function
+    //  } //------------- End Animate Function
 
 
 } // End Class  BoardGame
@@ -183,15 +184,18 @@ class Player {
       theImage.src = this.imgSrc;
       
       // drawing the img of player
-      theImage.onload = ()=>{
       this.ctx.drawImage(theImage, this.playerLocation[0], this.playerLocation[1], this.width, this.height)
      
         // drawing the helth points above the player
         this.ctx.font = "15px Arial";
         this.ctx.fillStyle="#FF0000";
-        this.ctx.fillText(this.health, this.playerLocation[0],this.playerLocation[1])
+        this.ctx.fillText(this.health, this.playerLocation[0], this.playerLocation[1])
+
+        // drawing the power level above the bullet
+        this.ctx.font = "15px Arial";
+        this.ctx.fillStyle="#FF0000";
+        this.ctx.fillText(`${this.bullet.power} power`,this.playerLocation[0], 50)
     
-      }
       
 
   }; // end draw charector
@@ -244,15 +248,7 @@ class Bullet {
         theImage.src = this.imgSrc;
         
         // drawing the img of the Bullet
-        theImage.onload = ()=>{
-        this.ctx.drawImage(theImage, this.BulletLocation[0]+dx, this.BulletLocation[1]+dy, this.width, this.height)
-       
-          // drawing the power level above the bullet
-          this.ctx.font = "15px Arial";
-          this.ctx.fillStyle="#FF0000";
-          this.ctx.fillText(`${this.power} power`, this.BulletLocation[0],50)
-      
-        }
+        this.ctx.drawImage(theImage, this.BulletLocation[0]+dx, this.BulletLocation[1]+dy, this.width, this.height);
 
       }; // end of draw bulet function
 
@@ -302,75 +298,112 @@ document.getElementById('start-game-button').onclick = function () {
   boardGame = new BoardGame(arrayOfNames, health, strength, rounds); 
   boardGame.clearWindow(); // clear previus games
   boardGame.drawStartGameTemplate(); // start game template drowing
-  boardGame.animation(50); // drowing everything in set intervals
+  animation();
 };
 
+
+
+function checkTurn() {
+
+    
+  if ( boardGame.checkColision() )
+  {
+      if (whosTurn === true) {
+      boardGame.playerTwo.health = boardGame.playerOne.health - (boardGame.playerOne.bullet.power/100) * boardGame.playerOne.strength;
+      whosTurn = false;
+      } else {
+        boardGame.playerOne.health = boardGame.playerOne.health - (boardGame.playerOne.bullet.power/100) * boardGame.playerOne.strength;
+        whosTurn = true;
+      }
+      
+  }
+
+} //---- End function check turn
+
+
+function animation() {
+
+  boardGame.ctx.clearRect(0, 0, boardGame.windowX, boardGame.windowY);
+  boardGame.drawEverything();  
+
+  window.requestAnimationFrame(animation);
+
+} //------------- End Animate Function
+
 // needs an if statment to activate and deactivate player one
-// key controls for player Two
 
+// key controls for players
 document.onkeydown = (e) =>{
 
-  console.log(e.key)
+  // key controls for player one
+  if (whosTurn) {
+      switch(e.key){
+        case 'q':
+        if (boardGame.playerOne.bullet.power < 100) {
+        boardGame.playerOne.bullet.power++;
+        }
+        break;
+        case 'a':
+        if (boardGame.playerOne.bullet.power > 0) {
+        boardGame.playerOne.bullet.power--;}
+        break;
+        case 'Shift':
+        boardGame.playerOne.bullet.shoot(1, boardGame.playerOne.strength);
+        break;
+        case 'ArrowDown':
+        e.preventDefault();
+        boardGame.playerOne.moveDown();
+        break;
+        case 'ArrowLeft':
+        e.preventDefault();
+        boardGame.playerOne.moveLeft();
+        break;
+        case 'ArrowRight':
+        e.preventDefault();
+        boardGame.playerOne.moveRight();
+        break;
+        case 'ArrowUp':
+        e.preventDefault();
+        boardGame.playerOne.moveUp();
+        break;
+      } // end player one Key functions
+   } else {
+   // key controls for player one  
+      switch(e.key){    
+          case 'q':
+        if (boardGame.playerTwo.bullet.power < 100) {
+        boardGame.playerTwo.bullet.power++;
+        }
+        break;
+        case 'a':
+        if (boardGame.playerTwo.bullet.power > 0) {
+        boardGame.playerTwo.bullet.power--;}
+        break;
+        case 'Shift':
+        boardGame.playerTwo.bullet.shoot(1, boardGame.playerTwo.strength);
+        break;
+        case 'ArrowDown':
+        e.preventDefault();
+        boardGame.playerTwo.moveDown();
+        break;
+        case 'ArrowLeft':
+        e.preventDefault();
+        boardGame.playerTwo.moveLeft();
+        break;
+        case 'ArrowRight':
+        e.preventDefault();
+        boardGame.playerTwo.moveRight();
+        break;
+        case 'ArrowUp':
+        e.preventDefault();
+        boardGame.playerTwo.moveUp();
+        break;
+      }
+    } // end player Two Key functions
 
-    switch(e.key){    case 'q':
-    if (boardGame.playerTwo.bullet.power < 100) {
-    boardGame.playerTwo.bullet.power++;
-    }
-    break;
-    case 'a':
-    if (boardGame.playerTwo.bullet.power > 0) {
-    boardGame.playerTwo.bullet.power--;}
-    break;
-    case 'Shift':
-    boardGame.playerTwo.bullet.shoot(1, boardGame.playerTwo.strength);
-    break;
-    case 'ArrowDown':
-    boardGame.playerTwo.moveDown();
-    break;
-    case 'ArrowLeft':
-    boardGame.playerTwo.moveLeft();
-    break;
-    case 'ArrowRight':
-    boardGame.playerTwo.moveRight();
-    break;
-    case 'ArrowUp':
-    boardGame.playerTwo.moveUp();
-    break;
-  }
-} // end player Two Key functions
+}//End key controls for players
 
-// key controls for player one
-document.onkeydown = (e) =>{
 
-  console.log(e.key)
-
-  switch(e.key){
-    case 'q':
-    if (boardGame.playerOne.bullet.power < 100) {
-    boardGame.playerOne.bullet.power++;
-    }
-    break;
-    case 'a':
-    if (boardGame.playerOne.bullet.power > 0) {
-    boardGame.playerOne.bullet.power--;}
-    break;
-    case 'Shift':
-    boardGame.playerOne.bullet.shoot(1, boardGame.playerOne.strength);
-    break;
-    case 'ArrowDown':
-    boardGame.playerOne.moveDown();
-    break;
-    case 'ArrowLeft':
-    boardGame.playerOne.moveLeft();
-    break;
-    case 'ArrowRight':
-    boardGame.playerOne.moveRight();
-    break;
-    case 'ArrowUp':
-    boardGame.playerOne.moveUp();
-    break;
-  }
-} // end player one Key functions
 
 
 ////---------------------------------------------------------------------
