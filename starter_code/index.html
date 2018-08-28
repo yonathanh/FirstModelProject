@@ -14,9 +14,11 @@
         
         <section class="top-section">
             <input type="text" id="name-player-1" name="firstname" placeholder="Change name..">
+            <button class="btn" id="name-player-1-btn"> enter</button>
             <img class="game-logo" src="./images/game-logo-T.png" alt="" > 
-            <button class="instractions-btn">instractions</button> 
+            <button class="btn instractions-btn">instractions</button> 
             <input type="text" id="name-player-2" name="firstname" placeholder="Change name.."> 
+            <button class="btn" id="name-player-2-btn"> enter</button>
         </section>
 
         <section class= "middle-section">
@@ -27,10 +29,7 @@
       </header>
 
       <section class="game-window" style="text-align:center;">
-        <canvas id="canvas" height="550px" width="1160px"></canvas>
-      </section>
-
-      <div class="instractions">
+              <div class="instractions">
         <h3>Instractions</h3>
           <ul>
             <li>
@@ -47,11 +46,14 @@
             </li>
           </ul>
         </div>
+        <canvas id="canvas" height="550px" width="1160px"></canvas>
+      </section>
 
 
-
-  <script type="text/javascript" src="canvas.js"></script>
-  <script type="text/javascript" src="makeTheWorldGreatAgain.js"></script>
+  <script src="./scripts/jquery-2.1.4.js"></script>
+  <script type="text/javascript" src="./scripts/htmlFunctions.js"></script>
+  <script type="text/javascript" src="./scripts/makeTheWorldGreatAgain.js"></script>
+  
 
 </body>
 </html>

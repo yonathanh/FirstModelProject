@@ -17,7 +17,7 @@
 }
 
 ul {
-  /* list-style: none; */
+  list-style: none;
   margin-left: 20px;
 }
 
@@ -30,20 +30,21 @@ header {
       margin: 0px 0px;
     }
 
-    .instractions-btn {
+    .btn {
       background: linear-gradient(to bottom, rgb(158, 27, 49), rgb(168, 55, 55));
       color: rgb(145, 255, 249);
       padding: 4px;
       margin-right: 10px;
       border-radius: 6px;
     }
+    
     .instractions {
-      /* visibility: hidden; */
 
-      display: block; 
-      width: 170px;
-      height: 50px;
-      font-size: 6px;
+      /* display: block;  */
+      margin: 20px 40px;
+      width: 1200px;
+      height: 150px;
+      font-size: 20px;
       border: 5px solid black; 
     }
 
