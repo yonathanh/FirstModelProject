@@ -7,8 +7,12 @@
   margin: 0;
   padding: 0;
   }
+  body {
+   background: rgb(24, 181, 192);
+  }
 
-  html, body, {
+  html, body {
+ 
     position:fixed;
     top:0;
     bottom:0;
@@ -41,6 +45,7 @@ header {
     .instractions {
 
       /* display: block;  */
+      background: rgb(219, 77, 196);
       margin: 20px 40px;
       width: 1200px;
       height: 150px;

@@ -8,7 +8,7 @@ const strength = 40;
 const rounds = 4;
 const imgSrcPlayer1 = "./images/game-logo-T.png";
 const imgSrcPlayer2 = "./images/teroristT.png";
-const imgSrcBullet3 = "./images/BulletT.png";
+const imgSrcBullet3 = "./images/552px-Frag_Grenade3.png";
 const playerOneLocationX = 130;
 const playerOneLocationY = 340;
 const playerTwoLocationX = 1020;
@@ -72,8 +72,8 @@ class BoardGame {
    drawEverything() {
     this.playerOne.drawPlayer();
     this.playerTwo.drawPlayer();
-    this.playerOne.bullet.drawBullet(50,-20);
-    this.playerTwo.bullet.drawBullet(-30,0);
+    this.playerOne.bullet.drawBullet(50,7);
+    this.playerTwo.bullet.drawBullet(-3,32);
    } 
 
    drawStartGameTemplate() {
@@ -88,8 +88,8 @@ class BoardGame {
       //---------- draw the board
       this.playerOne.drawPlayer();
       this.playerTwo.drawPlayer();
-      this.playerOne.bullet.drawBullet(50,-20);
-      this.playerTwo.bullet.drawBullet(-30,0);
+      this.playerOne.bullet.drawBullet(50,7);
+      this.playerTwo.bullet.drawBullet(-3,32);
 
 
       //------------- draw player name
@@ -231,9 +231,11 @@ class Bullet {
     this.BulletLocation = [BulletLocationX, BulletLocationY];
     this.canvas = document.getElementById('canvas');
     this.ctx = this.canvas.getContext('2d');
-    this.power = 20;
-    this.width = 30;
-    this.height = 30;
+    this.power = 100;
+    this.width = 15;
+    this.height = 15;
+    this.canShoot = true;
+    
   };
 
     drawBullet(dx, dy) {
@@ -252,13 +254,15 @@ class Bullet {
 
   shoot(direction, strength ) {
 
+    
+if (this.canShoot) {
 
-    this.ex = 50; //for exelaration
+    this.ex = 80; //bullet speed (the higher, the slower the speed)
     let directionX = direction;
     let directionY = 1;
     let fource = (this.power/100) * strength;
       
-      setInterval(() =>  { 
+    setInterval(() =>  { 
         
         this.BulletLocation[0] += (10 * directionX);
         this.BulletLocation[1] -= (10 * directionY);
@@ -270,8 +274,21 @@ class Bullet {
         }
      
       }, this.ex ) //  negative speed of bullet, increse to decrese speed (increases time wait to draw next)
+      setInterval(() =>  { 
+        
+        this.BulletLocation[0] += (10 * directionX);
+        this.BulletLocation[1] += (4 * directionY);
+  
+        fource--;
+  
+        if (fource <= 1) {
+          directionY = -1;
+        }
+     
+      }, this.ex ) //  negative speed of bullet, increse to decrese speed (increases time wait to draw next)
 
-
+      this.canShoot = false;
+    }
 
    } // end of function shoot
 
