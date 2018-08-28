@@ -101,68 +101,48 @@ class BoardGame {
 
    checkColision() {
 
-    //((this.playerOne.bullet.BulletLocation[0] >= this.playerTwo.playerLocation[0]) && (this.playerOne.bullet.BulletLocation[1] >= this.playerTwo.playerLocation[1]) ) ||
-    //((this.playerTwo.bullet.BulletLocation[0] <= this.playerOne.playerLocation[0]) && (this.playerTwo.bullet.BulletLocation[1] >= this.playerOne.playerLocation[1]) ))
+    let checker =0; // the return value for 4 options,
 
-    let object1x = this.playerOne.playerLocation[0];
-    let object1y = this.playerOne.playerLocation[1];
-    let object1width = this.playerOne.width;
-    let object1height = this.playerOne.height;
-    let object1Bx = this.playerOne.bullet.BulletLocation[0];
-    let object1By = this.playerOne.bullet.BulletLocation[1];
-    let object1Bwidth = this.playerOne.bullet.width;
-    let object1Bheight = this.playerOne.bullet.height;
-    let object2x = this.playerTwo.playerLocation[0];
-    let object2y = this.playerTwo.playerLocation[1];
-    let object2width = this.playerTwo.width;
-    let object2height = this.playerTwo.height;
-    let object2Bx = this.playerTwo.bullet.BulletLocation[0];
-    let object2By = this.playerTwo.bullet.BulletLocation[1];
-    let object2Bwidth = this.playerTwo.bullet.width;
-    let object2Bheight = this.playerTwo.bullet.height;
+     let object1x = this.playerOne.playerLocation[0];
+     let object1y = this.playerOne.playerLocation[1];
+     let object1width = this.playerOne.width;
+     let object1height = this.playerOne.height;
+     let object1Bx = this.playerOne.bullet.BulletLocation[0];
+     let object1By = this.playerOne.bullet.BulletLocation[1];
+     let object1Bwidth = this.playerOne.bullet.width;
+     let object1Bheight = this.playerOne.bullet.height;
+     let object2x = this.playerTwo.playerLocation[0];
+     let object2y = this.playerTwo.playerLocation[1];
+     let object2width = this.playerTwo.width;
+     let object2height = this.playerTwo.height;
+     let object2Bx = this.playerTwo.bullet.BulletLocation[0];
+     let object2By = this.playerTwo.bullet.BulletLocation[1];
+     let object2Bwidth = this.playerTwo.bullet.width;
+     let object2Bheight = this.playerTwo.bullet.height;
 
-    // The objects are touching
+     // The objects are touching
 
-    if ( (object1Bx < object2x + object2width  && object1Bx + object1Bwidth  > object2x) &&
-      (object1By < object2y + object2height && object1By + object1Bheight > object2y)   
-      || 
-      (object2Bx < object1x + object1width  && object2Bx + object2Bwidth  > object1x) &&
-      (object2By < object1y + object1height && object2By + object2Bheight > object1y) ) 
-            {
-              return true;
-            }
+     // bullet from player one hits player two
+     if ((object1Bx < object2x + object2width && object1Bx + object1Bwidth > object2x) &&
+       (object1By < object2y + object2height && object1By + object1Bheight > object2y)) {
+       checker = 1;
+       // bullet player one hits a wall
+     } else if (object1Bx > this.windowX || object1By > this.windowY || object1By <= 0) {
+       checker = 2;
+       // bullet from Two one hits player One
+     } else if ((object2Bx < object1x + object1width && object2Bx + object2Bwidth > object1x) &&
+       (object2By < object1y + object1height && object2By + object2Bheight > object1y)) {
+       checker = 3;
+        // bullet player Two hits a wall
+     } else if ((object2Bx <= 0 || object2By > this.windowY || object2By <= 0)) {
+       checker = 4;
+     }
+     else // bullet is still in motion
+     { checker = 0; }
+
+     return checker;
 
    } //------------- End checkColision function
-
-    //  //------------- Animate
-
-    //  animation() {
-
-    
-    //     console.log("animation");
-        
-    //     if ( this.checkColision() )
-    //     {
-    //         if (whosTurn === false) {
-    //         this.playerTwo.health = this.playerOne.health - (this.playerOne.bullet.power/100) * this.playerOne.strength;
-    //         whosTurn = true;
-    //         } else {
-    //           this.playerOne.health = this.playerOne.health - (this.playerOne.bullet.power/100) * this.playerOne.strength;
-    //           whosTurn = false;
-    //         }
-            
-    //     }
-
-    //     this.ctx.clearRect(0, 0, this.windowX, this.windowY);
-    //     this.drawEverything();  
-    //     if(whosTurn){
-    //       this.animation();  
-    //     }
-
-    //     window.requestAnimationFrame(this.animation());
-
-    //  } //------------- End Animate Function
-
 
 } // End Class  BoardGame
 
@@ -251,7 +231,7 @@ class Bullet {
     this.BulletLocation = [BulletLocationX, BulletLocationY];
     this.canvas = document.getElementById('canvas');
     this.ctx = this.canvas.getContext('2d');
-    this.power = 100;
+    this.power = 20;
     this.width = 30;
     this.height = 30;
   };
@@ -319,21 +299,29 @@ document.getElementById('start-game-button').onclick = function () {
 
 function changeTurn() {
 
-    
-  if ( boardGame.checkColision() )
+  if ( boardGame.checkColision() != 0 )
   {
-      if (whosTurn === true) {
-      boardGame.playerTwo.health = boardGame.playerOne.health - (boardGame.playerOne.bullet.power/100) * boardGame.playerOne.strength;
+    if (boardGame.checkColision() === 1) { // player one bullet hit player two
+
+      boardGame.playerTwo.health = boardGame.playerOne.health - (boardGame.playerOne.bullet.power / 100) * boardGame.playerOne.strength;
       whosTurn = false;
       boardGame.playerOne.bullet = new Bullet(imgSrcBullet3, playerOneLocationX, playerOneLocationY);
+    } else if (boardGame.checkColision() === 2) {  // player one bullet hit whall
 
-      } else {
-        boardGame.playerOne.health = boardGame.playerOne.health - (boardGame.playerOne.bullet.power/100) * boardGame.playerOne.strength;
-        whosTurn = true;
-        boardGame.playerTwo.bullet = new Bullet(imgSrcBullet3, playerTwoLocationX, playerTwoLocationY);
-      }
-      
-  }
+      whosTurn = false;
+      boardGame.playerOne.bullet = new Bullet(imgSrcBullet3, playerOneLocationX, playerOneLocationY);
+    } else if (boardGame.checkColision() === 3) {  // player Two bullet hit player One
+
+      boardGame.playerOne.health = boardGame.playerOne.health - (boardGame.playerOne.bullet.power / 100) * boardGame.playerOne.strength;
+      whosTurn = true;
+      boardGame.playerTwo.bullet = new Bullet(imgSrcBullet3, playerTwoLocationX, playerTwoLocationY);
+    } else if (boardGame.checkColision() === 4) {  // player Two bullet hit Wall
+
+      whosTurn = true;
+      boardGame.playerTwo.bullet = new Bullet(imgSrcBullet3, playerTwoLocationX, playerTwoLocationY);
+    }
+
+  }// end if statment
 
 } //---- End function check turn
 
@@ -357,7 +345,7 @@ document.onkeydown = (e) =>{
   if (whosTurn) {
       switch(e.key){
         case 'q':
-        if (boardGame.playerOne.bullet.power < 100) {
+        if (boardGame.playerOne.bullet.power < 200) {
         boardGame.playerOne.bullet.power++;
         }
         break;
@@ -389,7 +377,7 @@ document.onkeydown = (e) =>{
    // key controls for player one  
       switch(e.key){    
           case 'q':
-        if (boardGame.playerTwo.bullet.power < 100) {
+        if (boardGame.playerTwo.bullet.power < 200) {
         boardGame.playerTwo.bullet.power++;
         }
         break;
