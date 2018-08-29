@@ -1,17 +1,124 @@
 
+//-------------------------------------------------------------------------------------------------
+
+
+
+////---------------- function explostion animation
+
+
+var canv = document.getElementById('canvas');
+var ctx = canv.getContext('2d');
+
+var imgExSrc = new Image();
+imgExSrc.src = "./images/blood-spriteT.png";
+var explosions= [{x:0, y:0, animx:0, animy:0 }];
+
+
+function animateExplosion(x,y) {
+
+  setInterval(() => {
+    //Animation explosions
+    for (i in explosions) {
+      explosions[i].animx = explosions[i].animx + 0.5;
+      if (explosions[i].animx > 7) { explosions[i].animy++; explosions[i].animx = 0 }
+      if (explosions[i].animy > 7)
+        explosions.splice(i, 1);
+        ctx.clearRect(0, 0, canv.width, canv.height);
+    }
+
+    if (explosions.length !== 0) {
+      for (i of explosions) {
+
+      //-------- audio sound for the explosion
+       
+        ctx.drawImage(imgExSrc, 128 * Math.floor(i.animx), 128 * Math.floor(i.animy), 128, 128, x, y, 70, 70);
+        
+      }
+    }
+
+  }, 30);
+  
+
+}// End function animateExplosion 
+
+//animateExplosion(500, 100);
+
+//----------------- Game sounds functions
+
+function expSound () {
+
+  var sound = new Audio();
+  sound.src = "./sounds/Water-explostion.mp3";
+  sound.play();
+
+}
+
+function gameSound () {
+
+  var sound = new Audio();
+  sound.src = "./sounds/Tribal Ritual.wav";
+  sound.play();
+
+}
+
+function powerUpSound () {
+
+  var sound = new Audio();
+  sound.src = "./sounds/power-up.mp3";
+  sound.play();
+
+}
+
+function AngleSound () {
+
+  var sound = new Audio();
+  sound.src = "./sounds/angleAdjust2.mp3";
+  sound.play();
+
+}
+
+function shootSound () {
+
+  var sound = new Audio();
+  sound.src = "./sounds/Shoot.mp3";
+  sound.play();
+
+}
+
+function grenadeExplode () {
+
+  var sound = new Audio();
+  sound.src = "./sounds/GrenadeExplosion.mp3";
+  sound.play();
+
+}
+
+function droppingSound () {
+
+  var sound = new Audio();
+  sound.src = "./sounds/Rocket-thrust.mp3";
+  sound.play();
+
+}
+
+
+//----------------- End Game sounds functions
+
+//-------------------------------------------------------------------------------------------------
+
 
 //---------------  Global variables 
 
 const arrayOfNames = ["Gal Gadot", "Tom Hardy", "Emilia Clarke", "Alexandra Daddario", "Bill Skarsgård", "Pom Klementieff", "Ana de Armas", "Dan Stevens", "Sofia Boutella", "Katherine Langford", "Karen Gillan", "Robbie", "Felicity Jones", "Emma Stone", "Dylan Minnette", "Jennifer Lawrence", "Alicia Vikander", "ritt Robertson", "Brie Larson", "Keanu Reeves", "Sophia Lillis", "James McAvoy"];
-const health = 20;
+const health = 16;
 const strength = 40;
 const rounds = 4;
-const imgSrcPlayer1 = "./images/game-logo-T.png";
+const imgSrcPlayer1 = "./images/trump.png";
 const imgSrcPlayer2 = "./images/teroristT.png";
 const imgSrcBullet3 = "./images/552px-Frag_Grenade3.png";
 const playerOneLocationX = 130;
 const playerOneLocationY = 340;
-const playerTwoLocationX = 1020;
+const playerTwoLocationX = 1050;
 const playerTwoLocationY = 380;
 var whosTurn = true;
 
@@ -29,6 +136,7 @@ class BoardGame {
     this.windowY = canvas.height;
     this.canvas = document.getElementById('canvas');
     this.ctx = canvas.getContext('2d');
+    this.anime = true;
   };
 
   getName(arrayOfNames) {
@@ -48,18 +156,28 @@ class BoardGame {
 
   checkGameWinner() {
     if (this.playerOne.health <= 0) {
+
+      this.anime = false;
+      expSound();
+      animateExplosion(130, 340);
+
       setTimeout(() => {
         alert(`Game Over '_' \n Player ${this.playerTwo.name} Wins`);
         window.location.reload();
-      }, 1000);
-      this.drawGameOver()
+      }, 2000);
+      //this.drawGameOver()
 
     } else if (this.playerTwo.health <= 0) {
+
+      this.anime = false;
+      expSound();
+      animateExplosion(1050, 380);
+
       setTimeout(() => {
         alert(`Game Over '_' \n Player ${this.playerOne.name} Wins`);
         window.location.reload();
-      }, 1000);
-      this.drawGameOver()
+      }, 2000);
+      //this.drawGameOver()
     };
   } // End checkGameWinner function
 
@@ -76,6 +194,8 @@ class BoardGame {
     this.playerTwo.drawPlayer();
     this.playerOne.bullet.drawBullet(50,7);
     this.playerTwo.bullet.drawBullet(-3,32);
+    // this.playerOne.animateExplosion(100,100);
+    // this.playerTwo.animateExplosion(50,50);
    } 
 
    drawStartGameTemplate() {
@@ -125,18 +245,18 @@ class BoardGame {
      // The objects are touching
 
      // bullet from player one hits player two
-     if ((object1Bx < object2x + object2width && object1Bx + object1Bwidth > object2x) &&
-       (object1By < object2y + object2height && object1By + object1Bheight > object2y)) {
+     if ((object1Bx < (object2x + object2width) && (object1Bx) > object2x) &&
+       (object1By < (object2y + object2height) && (object1By) > object2y)) {
        checker = 1;
        // bullet player one hits a wall
-     } else if (object1Bx > this.windowX || object1By > this.windowY) {
+     } else if ((object1Bx > this.windowX) || (object1By > this.windowY)) {
        checker = 2;
        // bullet from Two one hits player One
      } else if ((object2Bx < object1x + object1width && object2Bx + object2Bwidth > object1x) &&
        (object2By < object1y + object1height && object2By + object2Bheight > object1y)) {
        checker = 3;
         // bullet player Two hits a wall
-     } else if ((object2Bx <= 0 || object2By > this.windowY )) {
+     } else if ((object2Bx <= 0) || (object2By > this.windowY )) {
        checker = 4;
      }
      else // bullet is still in motion
@@ -193,7 +313,9 @@ class Player {
         // drawing the helth points above the player
         this.ctx.font = "15px Arial";
         this.ctx.fillStyle="#FF0000";
-        this.ctx.fillText(this.health, this.playerLocation[0], this.playerLocation[1])
+        if (this.health >0) {
+          this.ctx.fillText(this.health, this.playerLocation[0], this.playerLocation[1])
+        } else {this.ctx.fillText('XX', this.playerLocation[0], this.playerLocation[1])}
 
         // drawing the power level above the bullet
         this.ctx.font = "15px Arial";
@@ -218,6 +340,40 @@ class Player {
       
 
   }; // end draw charector
+
+
+//   // End function animateExplosion 
+
+//  animateExplosion(x,y) {
+
+
+//   console.log("animateExplosion");
+
+//   var imgExSrc = new Image();
+//   imgExSrc.src = "./images/blood-spriteT.png";
+//   var explosions= [{x:0, y:0, animx:0, animy:0 }];
+
+//   setInterval(() => {
+//     //Animation explosions
+//     for (i in explosions) {
+//       explosions[i].animx = explosions[i].animx + 0.5;
+//       if (explosions[i].animx > 7) { explosions[i].animy++; explosions[i].animx = 0 }
+//       if (explosions[i].animy > 7)
+//         explosions.splice(i, 1);
+//         this.ctx.clearRect(0, 0, canv.width, canv.height);
+//     }
+
+//     if (explosions.length !== 0) {
+//       for (i of explosions) {
+//         ctx.drawImage(imgExSrc, 128 * Math.floor(i.animx), 128 * Math.floor(i.animy), 128, 128, x, y, 60, 60);
+        
+//       }
+//     }
+
+//   }, 20);
+  
+
+// }// End function animateExplosion 
 
  //----------------- Movieng Controls
     moveUp(){
@@ -316,7 +472,7 @@ if (this.canShoot) {
 }  // End of Class bullet
 
 
-
+////------------------- End classes and varables ----------------------------////
 
 
 
@@ -325,11 +481,13 @@ if (this.canShoot) {
 // The Game Start Buttens Has Been Clicked
 document.getElementById('start-game-button').onclick = function () { 
 
+  gameSound ();
+
   // Genarates a new game
   boardGame = new BoardGame(arrayOfNames, health, strength, rounds); 
   boardGame.clearWindow(); // clear previus games
   boardGame.drawStartGameTemplate(); // start game template drowing
-  animation();
+  animation(boardGame.anime);
 };
 
 
@@ -340,22 +498,30 @@ function changeTurn() {
   {
     if (boardGame.checkColision() === 1) { // player one bullet hit player two
 
+      grenadeExplode ();
       boardGame.playerTwo.health = boardGame.playerOne.health - (boardGame.playerOne.bullet.power / 100) * boardGame.playerOne.strength;
       whosTurn = false;
       boardGame.playerOne.bullet = new Bullet(imgSrcBullet3, playerOneLocationX, playerOneLocationY);
+      setTimeout(() => {
       boardGame.checkGameWinner();
-    } else if (boardGame.checkColision() === 2) {  // player one bullet hit whall
+      },200)
+    } else if (boardGame.checkColision() === 2) {  // player one bullet hit wall
 
+      grenadeExplode ();
       whosTurn = false;
       boardGame.playerOne.bullet = new Bullet(imgSrcBullet3, playerOneLocationX, playerOneLocationY);
     } else if (boardGame.checkColision() === 3) {  // player Two bullet hit player One
 
+      grenadeExplode ();
       boardGame.playerOne.health = boardGame.playerOne.health - (boardGame.playerOne.bullet.power / 100) * boardGame.playerOne.strength;
       whosTurn = true;
       boardGame.playerTwo.bullet = new Bullet(imgSrcBullet3, playerTwoLocationX, playerTwoLocationY);
-      boardGame.checkGameWinner();
+      setTimeout(() => {
+        boardGame.checkGameWinner();
+        },200)
     } else if (boardGame.checkColision() === 4) {  // player Two bullet hit Wall
 
+      grenadeExplode ();
       whosTurn = true;
       boardGame.playerTwo.bullet = new Bullet(imgSrcBullet3, playerTwoLocationX, playerTwoLocationY);
     }
@@ -365,13 +531,17 @@ function changeTurn() {
 } //---- End function check turn
 
 
-function animation() {
+function animation(anime) {
 
   boardGame.ctx.clearRect(0, 0, boardGame.windowX, boardGame.windowY);
   boardGame.drawEverything(); 
   changeTurn(); 
 
-  window.requestAnimationFrame(animation);
+  anime = boardGame.anime;
+
+  if (anime) {
+    window.requestAnimationFrame(animation);
+  }
 
 } //------------- End Animate Function
 
@@ -385,80 +555,96 @@ document.onkeydown = (e) =>{
     switch (e.key) {
       case 'q':
         if (boardGame.playerOne.bullet.power < 200) {
+          powerUpSound ()
           boardGame.playerOne.bullet.power++;
         }
         break;
       case 'a':
         if (boardGame.playerOne.bullet.power > 0) {
+          powerUpSound ()
           boardGame.playerOne.bullet.power--;
         }
         break;
       case 'Shift':
         boardGame.playerOne.bullet.shoot(1, boardGame.playerOne.strength);
+        shootSound ();
+        setTimeout(() => {
+          droppingSound ();
+        }, 1000);
         break;
       case 'ArrowUp':
         e.preventDefault();
         if (boardGame.playerOne.bullet.angle < 100) {
+          AngleSound ();
           boardGame.playerOne.bullet.angle++;
         }
         break;
       case 'ArrowDown':
         e.preventDefault();
         if (boardGame.playerOne.bullet.angle > 0) {
+          AngleSound ();
           boardGame.playerOne.bullet.angle--;
         }
         break;
-      case 'ArrowLeft':
-        e.preventDefault();
-        boardGame.playerOne.moveLeft();
-        break;
-      case 'ArrowRight':
-        e.preventDefault();
-        boardGame.playerOne.moveRight();
-        break;
+      // case 'ArrowLeft':
+      //   e.preventDefault();
+      //   boardGame.playerOne.moveLeft();
+      //   break;
+      // case 'ArrowRight':
+      //   e.preventDefault();
+      //   boardGame.playerOne.moveRight();
+      //   break;
     } // end player one Key functions
   } else {
     // key controls for player one  
     switch (e.key) {
       case 'q':
         if (boardGame.playerTwo.bullet.power < 200) {
+          powerUpSound ();
           boardGame.playerTwo.bullet.power++;
         }
         break;
       case 'a':
         if (boardGame.playerTwo.bullet.power > 0) {
+          powerUpSound ();
           boardGame.playerTwo.bullet.power--;
         }
         break;
       case 'Shift':
         boardGame.playerTwo.bullet.shoot(-1, boardGame.playerTwo.strength);
+        shootSound ();
+        setTimeout(() => {
+          droppingSound ();
+        }, 1000);
         break;
       case 'ArrowUp':
         e.preventDefault();
         if (boardGame.playerTwo.bullet.angle < 100) {
+          AngleSound ();
           boardGame.playerTwo.bullet.angle++;
         }
         break;
       case 'ArrowDown':
         e.preventDefault();
         if (boardGame.playerTwo.bullet.angle > 0) {
+          AngleSound ();
           boardGame.playerTwo.bullet.angle--;
         }
         break;
-      case 'ArrowLeft':
-        e.preventDefault();
-        boardGame.playerTwo.moveLeft();
-        break;
-      case 'ArrowRight':
-        e.preventDefault();
-        boardGame.playerTwo.moveRight();
-        break;
+      // case 'ArrowLeft':
+      //   e.preventDefault();
+      //   boardGame.playerTwo.moveLeft();
+      //   break;
+      // case 'ArrowRight':
+      //   e.preventDefault();
+      //   boardGame.playerTwo.moveRight();
+      //   break;
     }
   } // end player Two Key functions
 
 }//End key controls for players
 
 
-
+   
 
 ////---------------------------------------------------------------------
