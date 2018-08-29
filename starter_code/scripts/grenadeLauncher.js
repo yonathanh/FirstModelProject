@@ -231,7 +231,7 @@ class Bullet {
     this.BulletLocation = [BulletLocationX, BulletLocationY];
     this.canvas = document.getElementById('canvas');
     this.ctx = this.canvas.getContext('2d');
-    this.power = 100;
+    this.power = 50;
     this.width = 15;
     this.height = 15;
     this.canShoot = true;
@@ -260,12 +260,12 @@ if (this.canShoot) {
     this.ex = 80; //bullet speed (the higher, the slower the speed)
     let directionX = direction;
     let directionY = 1;
-    let fource = (this.power/100) * strength;
+    let fource = (this.power/50) * strength;
       
     setInterval(() =>  { 
         
-        this.BulletLocation[0] += (10 * directionX);
-        this.BulletLocation[1] -= (10 * directionY);
+        this.BulletLocation[0] += (4 * directionX);
+        this.BulletLocation[1] -= (4 * directionY);
   
         fource--;
   
@@ -276,10 +276,9 @@ if (this.canShoot) {
       }, this.ex ) //  negative speed of bullet, increse to decrese speed (increases time wait to draw next)
       setInterval(() =>  { 
         
-        this.BulletLocation[0] += (10 * directionX);
-        this.BulletLocation[1] += (4 * directionY);
+        this.BulletLocation[0] += (4 * directionX);
+        this.BulletLocation[1] += (2 * directionY);
   
-        fource--;
   
         if (fource <= 1) {
           directionY = -1;
