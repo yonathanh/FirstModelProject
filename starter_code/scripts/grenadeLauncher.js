@@ -3,7 +3,7 @@
 //---------------  Global variables 
 
 const arrayOfNames = ["Gal Gadot", "Tom Hardy", "Emilia Clarke", "Alexandra Daddario", "Bill Skarsgård", "Pom Klementieff", "Ana de Armas", "Dan Stevens", "Sofia Boutella", "Katherine Langford", "Karen Gillan", "Robbie", "Felicity Jones", "Emma Stone", "Dylan Minnette", "Jennifer Lawrence", "Alicia Vikander", "ritt Robertson", "Brie Larson", "Keanu Reeves", "Sophia Lillis", "James McAvoy"];
-const health = 100;
+const health = 20;
 const strength = 40;
 const rounds = 4;
 const imgSrcPlayer1 = "./images/game-logo-T.png";
@@ -47,16 +47,18 @@ class BoardGame {
 
 
   checkGameWinner() {
-    if (this.playerOne.health === 0) {
+    if (this.playerOne.health <= 0) {
       setTimeout(() => {
         alert(`Game Over '_' \n Player ${this.playerTwo.name} Wins`);
-      }, 200);
+        window.location.reload();
+      }, 1000);
       this.drawGameOver()
 
-    } else if (this.playerTwo.health === 0) {
+    } else if (this.playerTwo.health <= 0) {
       setTimeout(() => {
         alert(`Game Over '_' \n Player ${this.playerOne.name} Wins`);
-      }, 200);
+        window.location.reload();
+      }, 1000);
       this.drawGameOver()
     };
   } // End checkGameWinner function
@@ -198,10 +200,20 @@ class Player {
         this.ctx.fillStyle="#FF0000";
         this.ctx.fillText(`${this.bullet.power} power`,this.playerLocation[0], 50)
 
-         // drawing the angle level above the bullet
-         this.ctx.font = "15px Arial";
-         this.ctx.fillStyle="#FF0000";
-         this.ctx.fillText(`${this.bullet.angle} angle`,this.playerLocation[0], 100)
+         // drawing the angle level above the bullet in a line increase format
+         this.ctx.beginPath();
+         this.ctx.lineWidth=10;
+         this.ctx.moveTo(this.playerLocation[0]+20, 150);
+         this.ctx.lineTo(this.playerLocation[0]+20, 150-this.bullet.angle);
+         this.ctx.closePath();
+         this.ctx.strokeStyle="#7700ff";
+         this.ctx.stroke();
+
+
+         // drawing the angle level above the bullet in a number increase format
+        //  this.ctx.font = "15px Arial";
+        //  this.ctx.fillStyle="#7700ff";
+        //  this.ctx.fillText(`${this.bullet.angle} angle`,this.playerLocation[0], 100)
     
       
 
@@ -236,11 +248,13 @@ class Bullet {
     this.BulletLocation = [BulletLocationX, BulletLocationY];
     this.canvas = document.getElementById('canvas');
     this.ctx = this.canvas.getContext('2d');
-    this.power = 50;
     this.width = 15;
     this.height = 15;
+    this.power = 40;
+    this.angle = 4 ; // default =4
     this.canShoot = true;
-    this.angle = 20 ; // default =4
+
+    
     
   };
 
@@ -329,6 +343,7 @@ function changeTurn() {
       boardGame.playerTwo.health = boardGame.playerOne.health - (boardGame.playerOne.bullet.power / 100) * boardGame.playerOne.strength;
       whosTurn = false;
       boardGame.playerOne.bullet = new Bullet(imgSrcBullet3, playerOneLocationX, playerOneLocationY);
+      boardGame.checkGameWinner();
     } else if (boardGame.checkColision() === 2) {  // player one bullet hit whall
 
       whosTurn = false;
@@ -338,6 +353,7 @@ function changeTurn() {
       boardGame.playerOne.health = boardGame.playerOne.health - (boardGame.playerOne.bullet.power / 100) * boardGame.playerOne.strength;
       whosTurn = true;
       boardGame.playerTwo.bullet = new Bullet(imgSrcBullet3, playerTwoLocationX, playerTwoLocationY);
+      boardGame.checkGameWinner();
     } else if (boardGame.checkColision() === 4) {  // player Two bullet hit Wall
 
       whosTurn = true;
@@ -388,7 +404,7 @@ document.onkeydown = (e) =>{
         break;
       case 'ArrowDown':
         e.preventDefault();
-        if (boardGame.playerOne.bullet.angle < 100) {
+        if (boardGame.playerOne.bullet.angle > 0) {
           boardGame.playerOne.bullet.angle--;
         }
         break;
@@ -425,7 +441,7 @@ document.onkeydown = (e) =>{
         break;
       case 'ArrowDown':
         e.preventDefault();
-        if (boardGame.playerTwo.bullet.angle < 100) {
+        if (boardGame.playerTwo.bullet.angle > 0) {
           boardGame.playerTwo.bullet.angle--;
         }
         break;
