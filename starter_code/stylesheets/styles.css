@@ -45,10 +45,11 @@ header {
     .instractions {
 
       /* display: block;  */
-      background: rgb(219, 77, 196);
-      margin: 20px 40px;
-      width: 1200px;
-      height: 150px;
+      position: absolute;
+      background: rgb(120, 77, 219);
+      margin: 20px 50px;
+      width: 1170px;
+      height: 170px;
       font-size: 20px;
       border: 5px solid black; 
     }
@@ -95,6 +96,7 @@ header {
 
   canvas {
     border: 10px solid black;
+    margin-top: 20px;
   }
 
   #canvas {

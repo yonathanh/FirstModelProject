@@ -127,14 +127,14 @@ class BoardGame {
        (object1By < object2y + object2height && object1By + object1Bheight > object2y)) {
        checker = 1;
        // bullet player one hits a wall
-     } else if (object1Bx > this.windowX || object1By > this.windowY || object1By <= 0) {
+     } else if (object1Bx > this.windowX || object1By > this.windowY) {
        checker = 2;
        // bullet from Two one hits player One
      } else if ((object2Bx < object1x + object1width && object2Bx + object2Bwidth > object1x) &&
        (object2By < object1y + object1height && object2By + object2Bheight > object1y)) {
        checker = 3;
         // bullet player Two hits a wall
-     } else if ((object2Bx <= 0 || object2By > this.windowY || object2By <= 0)) {
+     } else if ((object2Bx <= 0 || object2By > this.windowY )) {
        checker = 4;
      }
      else // bullet is still in motion
@@ -197,6 +197,11 @@ class Player {
         this.ctx.font = "15px Arial";
         this.ctx.fillStyle="#FF0000";
         this.ctx.fillText(`${this.bullet.power} power`,this.playerLocation[0], 50)
+
+         // drawing the angle level above the bullet
+         this.ctx.font = "15px Arial";
+         this.ctx.fillStyle="#FF0000";
+         this.ctx.fillText(`${this.bullet.angle} angle`,this.playerLocation[0], 100)
     
       
 
@@ -235,6 +240,7 @@ class Bullet {
     this.width = 15;
     this.height = 15;
     this.canShoot = true;
+    this.angle = 20 ; // default =4
     
   };
 
@@ -261,11 +267,12 @@ if (this.canShoot) {
     let directionX = direction;
     let directionY = 1;
     let fource = (this.power/50) * strength;
+    let dy = 20; // 4
       
     setInterval(() =>  { 
         
         this.BulletLocation[0] += (4 * directionX);
-        this.BulletLocation[1] -= (4 * directionY);
+        this.BulletLocation[1] -= (this.angle * directionY);
   
         fource--;
   
@@ -277,7 +284,7 @@ if (this.canShoot) {
       setInterval(() =>  { 
         
         this.BulletLocation[0] += (4 * directionX);
-        this.BulletLocation[1] += (2 * directionY);
+        this.BulletLocation[1] += (this.angle/2 * directionY);
   
   
         if (fource <= 1) {
@@ -359,69 +366,79 @@ document.onkeydown = (e) =>{
 
   // key controls for player one
   if (whosTurn) {
-      switch(e.key){
-        case 'q':
+    switch (e.key) {
+      case 'q':
         if (boardGame.playerOne.bullet.power < 200) {
-        boardGame.playerOne.bullet.power++;
+          boardGame.playerOne.bullet.power++;
         }
         break;
-        case 'a':
+      case 'a':
         if (boardGame.playerOne.bullet.power > 0) {
-        boardGame.playerOne.bullet.power--;}
+          boardGame.playerOne.bullet.power--;
+        }
         break;
-        case 'Shift':
+      case 'Shift':
         boardGame.playerOne.bullet.shoot(1, boardGame.playerOne.strength);
         break;
-        case 'ArrowDown':
+      case 'ArrowUp':
         e.preventDefault();
-        boardGame.playerOne.moveDown();
+        if (boardGame.playerOne.bullet.angle < 100) {
+          boardGame.playerOne.bullet.angle++;
+        }
         break;
-        case 'ArrowLeft':
+      case 'ArrowDown':
+        e.preventDefault();
+        if (boardGame.playerOne.bullet.angle < 100) {
+          boardGame.playerOne.bullet.angle--;
+        }
+        break;
+      case 'ArrowLeft':
         e.preventDefault();
         boardGame.playerOne.moveLeft();
         break;
-        case 'ArrowRight':
+      case 'ArrowRight':
         e.preventDefault();
         boardGame.playerOne.moveRight();
         break;
-        case 'ArrowUp':
-        e.preventDefault();
-        boardGame.playerOne.moveUp();
-        break;
-      } // end player one Key functions
-   } else {
-   // key controls for player one  
-      switch(e.key){    
-          case 'q':
+    } // end player one Key functions
+  } else {
+    // key controls for player one  
+    switch (e.key) {
+      case 'q':
         if (boardGame.playerTwo.bullet.power < 200) {
-        boardGame.playerTwo.bullet.power++;
+          boardGame.playerTwo.bullet.power++;
         }
         break;
-        case 'a':
+      case 'a':
         if (boardGame.playerTwo.bullet.power > 0) {
-        boardGame.playerTwo.bullet.power--;}
+          boardGame.playerTwo.bullet.power--;
+        }
         break;
-        case 'Shift':
+      case 'Shift':
         boardGame.playerTwo.bullet.shoot(-1, boardGame.playerTwo.strength);
         break;
-        case 'ArrowDown':
+      case 'ArrowUp':
         e.preventDefault();
-        boardGame.playerTwo.moveDown();
+        if (boardGame.playerTwo.bullet.angle < 100) {
+          boardGame.playerTwo.bullet.angle++;
+        }
         break;
-        case 'ArrowLeft':
+      case 'ArrowDown':
+        e.preventDefault();
+        if (boardGame.playerTwo.bullet.angle < 100) {
+          boardGame.playerTwo.bullet.angle--;
+        }
+        break;
+      case 'ArrowLeft':
         e.preventDefault();
         boardGame.playerTwo.moveLeft();
         break;
-        case 'ArrowRight':
+      case 'ArrowRight':
         e.preventDefault();
         boardGame.playerTwo.moveRight();
         break;
-        case 'ArrowUp':
-        e.preventDefault();
-        boardGame.playerTwo.moveUp();
-        break;
-      }
-    } // end player Two Key functions
+    }
+  } // end player Two Key functions
 
 }//End key controls for players
 
