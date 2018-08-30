@@ -115,6 +115,18 @@ header {
   }
 
 
+  .game-winner {
+
+    position: absolute;
+      color: rgb(131, 4, 42);
+      font-size: 30px;
+      font-style: italic;
+      left: 330px;
+      top: 250px;
+      
+  }
+
+
 
 
 

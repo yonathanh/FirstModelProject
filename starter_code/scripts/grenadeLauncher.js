@@ -104,6 +104,14 @@ function droppingSound () {
 
 }
 
+function gameOverSound () {
+
+  var sound = new Audio();
+  sound.src = "./sounds/Game-Over.mp3";
+  sound.play();
+
+}
+
 
 //----------------- End Game sounds functions
 
@@ -165,8 +173,13 @@ class BoardGame {
       animateExplosion(130, 340);
 
       setTimeout(() => {
-        alert(`Game Over '_' \n Player ${this.playerTwo.name} Wins`);
-        window.location.reload();
+
+        //alert(`Game Over '_' \n Player ${this.playerTwo.name} Wins`);
+        gameOverSound ();
+        $(".game-winner").html(`Player Two: ${this.playerTwo.name}  wins!!!`) ;
+        document.getElementById('game-over').click();
+
+        // window.location.reload();
       }, 2000);
       //this.drawGameOver()
 
@@ -177,8 +190,12 @@ class BoardGame {
       animateExplosion(1050, 380);
 
       setTimeout(() => {
-        alert(`Game Over '_' \n Player ${this.playerOne.name} Wins`);
-        window.location.reload();
+       // alert(`Game Over '_' \n Player ${this.playerOne.name} Wins`);
+       gameOverSound ();
+       $(".game-winner").html(`Player one: ${this.playerOne.name}  wins!!!`) ;
+       document.getElementById('game-over').click();
+
+        // window.location.reload();
       }, 2000);
       //this.drawGameOver()
     };
@@ -409,7 +426,7 @@ class Bullet {
     this.ctx = this.canvas.getContext('2d');
     this.width = 15;
     this.height = 15;
-    this.power = 40;
+    this.power = 30;
     this.angle = 4 ; // default =4
     this.canShoot = true;
 
@@ -451,6 +468,7 @@ if (this.canShoot) {
   
         if (fource <= 1) {
           directionY = -1;
+          
         }
      
       }, this.ex ) //  negative speed of bullet, increse to decrese speed (increases time wait to draw next)
@@ -556,13 +574,13 @@ document.onkeydown = (e) =>{
   // key controls for player one
   if (whosTurn) {
     switch (e.key) {
-      case 'q':
+      case 'ArrowRight':
         if (boardGame.playerOne.bullet.power < 200) {
           powerUpSound ()
           boardGame.playerOne.bullet.power++;
         }
         break;
-      case 'a':
+      case 'ArrowLeft':
         if (boardGame.playerOne.bullet.power > 0) {
           powerUpSound ()
           boardGame.playerOne.bullet.power--;
@@ -601,13 +619,13 @@ document.onkeydown = (e) =>{
   } else {
     // key controls for player one  
     switch (e.key) {
-      case 'q':
+      case 'ArrowRight':
         if (boardGame.playerTwo.bullet.power < 200) {
           powerUpSound ();
           boardGame.playerTwo.bullet.power++;
         }
         break;
-      case 'a':
+      case 'ArrowLeft':
         if (boardGame.playerTwo.bullet.power > 0) {
           powerUpSound ();
           boardGame.playerTwo.bullet.power--;

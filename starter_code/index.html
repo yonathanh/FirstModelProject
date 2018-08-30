@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <link rel="stylesheet" href="stylesheets/styles.css">
-  <title>Game</title>
+  <link rel="stylesheet" href="stylesheets/styles2.css">
+  <title>Game grenade Launcher</title>
 </head>
 <body>
 
@@ -16,16 +17,16 @@
             <button class="btn" id="name-player-1-btn"> enter</button>
             <input type="text" id="name-player-1" name="firstname" placeholder="Change name..">
             <img class="game-logo" src="./images/game-logo-T.png" >  
-            <img class="gif" src="./images/gif.gif" >
+            <img class="gif" src="./images/arrow.gif" >
             <button class="btn instractions-btn">instractions</button> 
             <input type="text" id="name-player-2" name="firstname" placeholder="Change name.."> 
             <button class="btn" id="name-player-2-btn"> enter</button>
         </section>
 
         <section class= "middle-section">
-          <span class="player-one">donald trump</span>
+          <span class="player-one">Player One</span>
           <button id="start-game-button">START GAME</button>
-          <span class="player-two">Terrorist</span>
+          <span class="player-two">PLayer Two</span>
         </section>
       </header>
 
@@ -34,27 +35,40 @@
         <h3><pre style="color:rgb(82, 236, 39)">Instructions           </pre></h3>
           <ul>
             <li>
-               <pre>*  use arrows to adjust gun angle              </pre>             
+               <pre>  *  use arrows to adjust gun angle                        </pre>             
             </li>
             <li>
-            <pre>*  use 'q' and 'a' to adjust gun power,        </pre>     
+               <pre>  *  use 'ArrowRight' and 'ArrowLeft' to adjust gun power, </pre>     
             </li>
             <li>
-               <pre>=> 'q' for up and 'a' for down (from 1 to 100)  </pre>
+               <pre>  *  use 'Up' and 'Down' to adjust shot angle,             </pre>     
             </li>
             <li>
-               <pre>*  use 'Up' and 'Down' to adjust shot angle,   </pre>     
-            </li>
+               <pre>  *  use shift key to fire                                 </pre>                    
+            </li> 
             <li>
-               <pre>*  use shift key to fire                       </pre>                    
-            </li>
-            <li>
-               <pre>*  damage = power/100 * 40                     </pre>           
+               <pre>  *  damage = power/100 * 40                               </pre>           
             </li>
           </ul>
         </div>
         <canvas id="canvas" height="512px" width="1160px"></canvas>
       </section>
+
+      <label id="game-over" for="modal-trigger">.</label>
+
+      <div class="modal" >
+          <input id="modal-trigger" class="checkbox" type="checkbox">
+          <div class="modal-overlay">
+            <label for="modal-trigger" class="o-close"></label>
+            <div class="modal-wrap small a-center">
+              <label for="modal-trigger" class="close">&#10006;</label>
+              <h2>Game Over</h2>
+              <p class="game-winner">
+                  plauyer one:   Player One Wins!!
+              </p>
+            </div>
+          </div>
+        </div>
 
 
   <script src="./scripts/jquery-2.1.4.js"></script>
