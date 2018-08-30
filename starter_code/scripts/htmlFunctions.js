@@ -11,6 +11,18 @@
     $(".instractions").toggle();
 
   })
+  
+  document.querySelector(".instractions-btn").onclick = function () { 
+
+    setTimeout( () =>{
+
+      $(".instractions").hide();
+
+    },2000);
+
+  };
+
+
 
   //--------------------------Change names
 
@@ -25,6 +37,10 @@
     $(".player-two").html(inputTwo) ;
   })
   
+
+
+
+
   //-----------------------------------
 
 

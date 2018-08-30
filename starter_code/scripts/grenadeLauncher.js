@@ -45,18 +45,21 @@ function animateExplosion(x,y) {
 
 //----------------- Game sounds functions
 
-function expSound () {
 
-  var sound = new Audio();
-  sound.src = "./sounds/Water-explostion.mp3";
-  sound.play();
 
-}
 
 function gameSound () {
 
   var sound = new Audio();
   sound.src = "./sounds/Tribal Ritual.wav";
+  sound.play();
+
+}
+
+function expSound () {
+
+  var sound = new Audio();
+  sound.src = "./sounds/Water-explostion.mp3";
   sound.play();
 
 }
@@ -111,13 +114,13 @@ function droppingSound () {
 
 const arrayOfNames = ["Gal Gadot", "Tom Hardy", "Emilia Clarke", "Alexandra Daddario", "Bill Skarsgård", "Pom Klementieff", "Ana de Armas", "Dan Stevens", "Sofia Boutella", "Katherine Langford", "Karen Gillan", "Robbie", "Felicity Jones", "Emma Stone", "Dylan Minnette", "Jennifer Lawrence", "Alicia Vikander", "ritt Robertson", "Brie Larson", "Keanu Reeves", "Sophia Lillis", "James McAvoy"];
 const health = 16;
-const strength = 40;
+const strength = 30;
 const rounds = 4;
-const imgSrcPlayer1 = "./images/trump.png";
+const imgSrcPlayer1 = "./images/trumpGunT.png";
 const imgSrcPlayer2 = "./images/teroristT.png";
 const imgSrcBullet3 = "./images/552px-Frag_Grenade3.png";
 const playerOneLocationX = 130;
-const playerOneLocationY = 340;
+const playerOneLocationY = 335;
 const playerTwoLocationX = 1050;
 const playerTwoLocationY = 380;
 var whosTurn = true;
@@ -245,7 +248,7 @@ class BoardGame {
      // The objects are touching
 
      // bullet from player one hits player two
-     if ((object1Bx < (object2x + object2width) && (object1Bx) > object2x) &&
+     if ((object1Bx < (object2x + object2width) && (object1Bx + object1Bwidth) > object2x) &&
        (object1By < (object2y + object2height) && (object1By) > object2y)) {
        checker = 1;
        // bullet player one hits a wall

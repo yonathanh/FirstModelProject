@@ -4,7 +4,7 @@
 
 /* removes all default margin and padding for every object on the page */
 * { 
-  margin: 0;
+  margin: 2px;
   padding: 0;
   }
   body {
@@ -37,21 +37,28 @@ header {
     .btn {
       background: linear-gradient(to bottom, rgb(158, 27, 49), rgb(168, 55, 55));
       color: rgb(145, 255, 249);
-      padding: 4px;
+      padding: 8px;
       margin-right: 10px;
       border-radius: 6px;
     }
-    
+    .gif {
+      width: 70px;
+      height: 50px;
+      margin-right: 5px;
+      padding-left: 500px; 
+
+    }
+
     .instractions {
 
       background: linear-gradient(0deg, rgba(187, 131, 48, 0.1), rgba(133, 6, 34, 0.1)), url(../images/instranctions-backgroundT.png) repeat;
       /* display: block;  */
       position: absolute;
       /* background: rgb(120, 77, 219); */
-      margin: 20px 60px;
+      margin: 20px 50px;
       width: 1170px;
       height: 170px;
-      font-size: 20px;
+      font-size: 18px;
       border: 4px solid rgb(83, 90, 85); 
     }
 
@@ -60,8 +67,10 @@ header {
     }
 
       .game-logo {
+        position: absolute;
         height: 60px;
-        padding: 5px 300px;
+        left: 580px;
+        top: 0px;
         }
 
 
@@ -71,7 +80,7 @@ header {
     .middle-section {
     
       text-align: center;
-      margin: 0px 0px;
+      margin: 0px 10px;
 
     }
 
@@ -96,7 +105,7 @@ header {
 
 
   canvas {
-    border: 10px solid black;
+    border: 5px outset rgba(75, 13, 13, 0.4);
     margin-top: 20px;
   }
 
