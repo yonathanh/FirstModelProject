@@ -29,7 +29,7 @@ function animateExplosion(x,y) {
     if (explosions.length !== 0) {
       for (i of explosions) {
 
-      //-------- audio sound for the explosion
+      ///////------------- audio sound for the explosion
        
         ctx.drawImage(imgExSrc, 128 * Math.floor(i.animx), 128 * Math.floor(i.animy), 128, 128, x, y, 70, 70);
         
