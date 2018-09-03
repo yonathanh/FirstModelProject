@@ -49,6 +49,10 @@ header {
 
     }
 
+    .instractions-btn {
+      background: rgb(119, 53, 110);
+    }
+
     .instractions {
 
       background: linear-gradient(0deg, rgba(187, 131, 48, 0.1), rgba(133, 6, 34, 0.1)), url(../images/instranctions-backgroundT.png) repeat;
